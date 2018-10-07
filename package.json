@@ -1,0 +1,32 @@
+{
+  "name": "data",
+  "version": "0.0.1",
+  "description": "The Database backing Crowdsplay",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./bin/startMongoDB.js"
+  },
+  "keywords": [],
+  "author": "Shawn Inder <shawninder@gmail.com>",
+  "contributors": [
+    "Shawn Inder <shawninder@gmail.com>"
+  ],
+  "license": "GPL-3.0",
+  "dependencies": {
+    "mongodb": "^3.1.6",
+    "qs": "^6.5.2",
+    "vigour-spawn": "^1.0.10"
+  },
+  "devDependencies": {
+    "standard": "^10.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shawninder/data.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shawninder/data/issues"
+  },
+  "homepage": "https://github.com/shawninder/data#readme",
+  "engines": {}
+}
