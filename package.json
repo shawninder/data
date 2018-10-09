@@ -4,7 +4,17 @@
   "description": "The Database backing Crowdsplay",
   "main": "index.js",
   "scripts": {
-    "start": "node ./bin/startMongoDB.js"
+    "dev": "node ./bin/startMongoDB.js",
+    "start": "node ./bin/startMongoDB.js",
+    "start-mongo": "mongo --host $MONGO_REPLICA_SET/$MONGO_HOSTS $MONGO_DATABASE",
+    "start-mongo-remote": "mongo \"mongodb+srv://$ATLAS_CLUSTER-$ATLAS_HOSTS/$ATLAS_DATABASE\" --username $ATLAS_BOT_USERNAME --password $ATLAS_BOT_PASSWORD",
+    "start-mongo-remote-admin": "mongo \"mongodb+srv://$ATLAS_CLUSTER-$ATLAS_HOSTS/$ATLAS_DATABASE\" --username $ATLAS_ADMIN_USERNAME --password $ATLAS_ADMIN_PASSWORD",
+    "create-bot-user": "mongo --host $MONGO_REPLICA_SET/$MONGO_HOSTS --eval \"const username = '$MONGO_BOT_USERNAME', password = '$MONGO_BOT_PASSWORD';\" $MONGO_DATABASE ./mongoScripts/createBot.js",
+    "create-bot-user-remote": "echo 'Check the README'",
+    "create-hub-user": "mongo --host $MONGO_REPLICA_SET/$MONGO_HOSTS --username $MONGO_BOT_USERNAME --password $MONGO_BOT_PASSWORD --eval \"const username = '$MONGO_HUB_USERNAME', password = '$MONGO_HUB_PASSWORD', database = '$MONGO_DATABASE';\" $MONGO_DATABASE ./mongoScripts/createHub.js",
+    "create-hub-user-remote": "mongo \"mongodb+srv://$ATLAS_CLUSTER-$ATLAS_HOSTS/$ATLAS_DATABASE\" --username $ATLAS_ADMIN_USERNAME --password $ATLAS_ADMIN_PASSWORD --eval \"const username = '$ATLAS_HUB_USERNAME', password = '$ATLAS_HUB_PASSWORD', database = '$ATLAS_DATABASE';\" ./mongoScripts/createHub.js",
+    "create-collections": "mongo --host $MONGO_REPLICA_SET/$MONGO_HOSTS --eval \"const database = '$MONGO_DATABASE';\" $MONGO_DATABASE ./mongoScripts/createCollections.js",
+    "create-collections-remote": "mongo \"mongodb+srv://$ATLAS_CLUSTER-$ATLAS_HOSTS/$ATLAS_DATABASE\" --username $ATLAS_BOT_USERNAME --password $ATLAS_BOT_PASSWORD --eval \"const database = '$ATLAS_DATABASE';\" ./mongoScripts/createCollections.js"
   },
   "keywords": [],
   "author": "Shawn Inder <shawninder@gmail.com>",

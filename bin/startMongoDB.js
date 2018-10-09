@@ -11,9 +11,10 @@ const commands = ports.map((port, idx) => {
 })
 
 Promise.all(commands.map((command) => {
-  return spawn(command)
-    .then(() => {
+  return spawn(command, { verbose: true, getOutput: true })
+    .then((output) => {
       console.log(command)
+      console.log(output)
     })
     .catch((ex) => {
       console.error('ex', ex)
