@@ -63,7 +63,8 @@ export ATLAS_HUB_PASSWORD=""
 ```
 7. On the new Cluster, use the *connect* button to get the *Add current IP address* button
 8. Add all other IPs which may want to connect
-9. Continue with [Common setup](#common-setup)
+9. If deploying with *now* or something else with very dynamic IPs, use 0.0.0.0/0 to allow access from everywhere
+10. Continue with [Common setup](#common-setup)
 
 ## Common setup
 1. Choose a database name and store it in ~/.bash_profile with
