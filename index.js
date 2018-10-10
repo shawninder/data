@@ -15,11 +15,8 @@ const database = {
 }
 
 function flush () {
-  console.log('flush', database.handler)
   queue.forEach((fn) => {
-    console.log('fn', fn)
     fn(database.handler)
-    console.log('BOOM')
   })
 }
 
@@ -28,16 +25,14 @@ function data (conf) {
   const query = {
     replicaSet: conf.replicaSet
   }
-  // if (conf.username && conf.password) {
-  //   query.ssl = true
-  //   query.authSource = 'admin'
-  // }
+  if (conf.username && conf.password) {
+    // query.ssl = true
+    // query.authSource = 'admin'
+  }
 
   const url = `mongodb://${auth}${conf.hosts}/${conf.databaseName}?${qs.stringify(query)}`
-  console.log('url', url)
   const client = new mongodb.MongoClient(url)
   client.connect((err) => {
-    console.log('err', err)
     if (err) {
       const msg = 'Error connecting to MongoDB'
       err.details = {
@@ -48,7 +43,7 @@ function data (conf) {
     }
     database.handler = client.db(conf.databaseName)
     flush()
-  })
+  }, { useNewUrlParser: true })
   // In the meantime
   return database
 }
