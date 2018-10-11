@@ -5,8 +5,8 @@ class Data {
   constructor (conf) {
     const auth = conf.username && conf.password ? `${conf.username}:${conf.password}@` : ''
     // const query = {
-      // retryWrites: true
-      // replicaSet: conf.replicaSet
+    //   retryWrites: true,
+    //   replicaSet: conf.replicaSet
     // }
     const cluster = (conf.cluster ? `${conf.cluster}-` : '')
     if (conf.username && conf.password) {
@@ -15,7 +15,7 @@ class Data {
     }
     this.conf = {
       ...conf,
-      connectionString: `mongodb+srv://${auth}${cluster}.mongodb.net/${conf.databaseName}`
+      connectionString: `mongodb+srv://${auth}${cluster}${conf.hosts}/${conf.databaseName}`
     }
     this.queue = [] // Remembers calls made while offlinet to playback later
     this.db = null // This will be the database handler once created and a not-ready flag until then
@@ -30,6 +30,7 @@ class Data {
   connect () {
     return new Promise((resolve, reject) => {
       try {
+        console.log('this.conf.connectionString')
         MongoClient.connect(this.conf.connectionString,
           { useNewUrlParser: true },
           (err, client) => {
