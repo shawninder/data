@@ -5,8 +5,8 @@ class Data {
   constructor (conf) {
     const auth = conf.username && conf.password ? `${conf.username}:${conf.password}@` : ''
     const query = {
-      retryWrites: true,
-      replicaSet: conf.replicaSet
+      retryWrites: true
+      // replicaSet: conf.replicaSet
     }
     const cluster = (conf.cluster ? `${conf.cluster}-` : '')
     if (conf.username && conf.password) {
