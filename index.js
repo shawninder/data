@@ -5,15 +5,17 @@ class Data {
   constructor (conf) {
     const auth = conf.username && conf.password ? `${conf.username}:${conf.password}@` : ''
     const query = {
+      retryWrites: true,
       replicaSet: conf.replicaSet
     }
+    const cluster = (conf.cluster ? `${conf.cluster}-` : '')
     if (conf.username && conf.password) {
       // query.ssl = true
       // query.authSource = 'admin'
     }
     this.conf = {
       ...conf,
-      connectionString: `mongodb://${auth}${conf.hosts}/${conf.databaseName}?${qs.stringify(query)}`
+      connectionString: `mongodb+srv://${auth}${cluster}${conf.hosts}/${conf.databaseName}?${qs.stringify(query)}`
     }
     this.queue = [] // Remembers calls made while offlinet to playback later
     this.db = null // This will be the database handler once created and a not-ready flag until then
