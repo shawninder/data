@@ -1,21 +1,22 @@
 const MongoClient = require('mongodb').MongoClient
-// const qs = require('qs')
+const qs = require('qs')
 
 class Data {
   constructor (conf) {
     const auth = conf.username && conf.password ? `${conf.username}:${conf.password}@` : ''
-    // const query = {
-    //   retryWrites: true,
-    //   replicaSet: conf.replicaSet
-    // }
+    const query = {
+      // retryWrites: true,
+      replicaSet: conf.replicaSet
+    }
     const cluster = (conf.cluster ? `${conf.cluster}-` : '')
     if (conf.username && conf.password) {
       // query.ssl = true
       // query.authSource = 'admin'
     }
+    const queryString = cluster ? '' : `?${qs.stringify(query)}`
     this.conf = {
       ...conf,
-      connectionString: `mongodb+srv://${auth}${cluster}${conf.hosts}/${conf.databaseName}`
+      connectionString: `mongodb+srv://${auth}${cluster}${conf.hosts}/${conf.databaseName}${queryString}`
     }
     this.queue = [] // Remembers calls made while offlinet to playback later
     this.db = null // This will be the database handler once created and a not-ready flag until then
