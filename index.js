@@ -30,7 +30,6 @@ class Data {
   connect () {
     return new Promise((resolve, reject) => {
       try {
-        console.log('this.conf.connectionString', this.conf.connectionString)
         MongoClient.connect(this.conf.connectionString,
           { useNewUrlParser: true },
           (err, client) => {
