@@ -1,51 +1,67 @@
-const mongodb = require('mongodb')
+const MongoClient = require('mongodb').MongoClient
 const qs = require('qs')
 
-const queue = []
-
-const database = {
-  handler: null,
-  use: (fn) => {
-    if (database.handler) {
-      return fn(database.handler)
-    } else {
-      queue.push(fn)
+class Data {
+  constructor (conf) {
+    const auth = conf.username && conf.password ? `${conf.username}:${conf.password}@` : ''
+    const query = {
+      replicaSet: conf.replicaSet
     }
-  }
-}
+    if (conf.username && conf.password) {
+      // query.ssl = true
+      // query.authSource = 'admin'
+    }
+    this.conf = {
+      ...conf,
+      connectionString: `mongodb://${auth}${conf.hosts}/${conf.databaseName}?${qs.stringify(query)}`
+    }
+    this.queue = [] // Remembers calls made while offlinet to playback later
+    this.db = null // This will be the database handler once created and a not-ready flag until then
 
-function flush () {
-  queue.forEach((fn) => {
-    fn(database.handler)
-  })
-}
+    this.use = this.use.bind(this)
+    this.connect = this.connect.bind(this)
+    this.flush = this.flush.bind(this)
 
-function data (conf) {
-  const auth = conf.username && conf.password ? `${conf.username}:${conf.password}@` : ''
-  const query = {
-    replicaSet: conf.replicaSet
-  }
-  if (conf.username && conf.password) {
-    // query.ssl = true
-    // query.authSource = 'admin'
+    this.connect().then(this.flush)
   }
 
-  const url = `mongodb://${auth}${conf.hosts}/${conf.databaseName}?${qs.stringify(query)}`
-  const client = new mongodb.MongoClient(url)
-  client.connect((err) => {
-    if (err) {
-      const msg = 'Error connecting to MongoDB'
-      err.details = {
-        msg,
-        url
+  connect () {
+    return new Promise((resolve, reject) => {
+      try {
+        MongoClient.connect(this.conf.connectionString,
+          { useNewUrlParser: true },
+          (err, client) => {
+            if (err) {
+              const msg = 'Error connecting to MongoDB'
+              err.details = {
+                msg,
+                url: this.conf.connectionString
+              }
+              reject(err)
+            } else {
+              this.db = client.db(this.conf.databaseName)
+              resolve(this.db)
+            }
+          })
+      } catch (ex) {
+        reject(ex)
       }
-      throw err
+    })
+  }
+
+  flush (db) {
+    this.queue.forEach((fn) => {
+      fn({ db: this.db })
+    })
+  }
+
+  use (fn) {
+    if (this.db) {
+      fn({ db: this.db })
+    } else {
+      this.queue.push(fn)
     }
-    database.handler = client.db(conf.databaseName)
-    flush()
-  }, { useNewUrlParser: true })
-  // In the meantime
-  return database
+  }
 }
 
-module.exports = exports = data
+module.exports = exports = Data

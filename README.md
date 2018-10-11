@@ -17,7 +17,7 @@ Keep reading to see how they are used:
 - ATLAS_ADMIN_PASSWORD
 
 ## Local setup
-1. Install MongoDB
+1. Install MongoDB (same version as Atlas)
 2. (dev) Prepare the directories required by MongoDB for local operation:
 (here <user> is the OS user that will be running `mongod` via `npm run db`)
 ```sh
@@ -26,11 +26,15 @@ sudo chown <user> /data/db
 sudo mkdir -p /srv/mongodb/rs0-0  /srv/mongodb/rs0-1 /srv/mongodb/rs0-2
 sudo chown -R <user> /srv/mongodb
 ```
-Note that these must match what's in *startMongoDB.js*
+Note that these paths must match what's in *startMongoDB.js*
 3. Launch MongoDB
 ```sh
-npm run start
+npm run dev
 ```
+4. Initiate the replica set
+```sh
+npm run initiate-rs
+````
 4. Create the first MongoDB user's username and password and store them in ~/.bash_profile with
 ```sh
 export MONGO_BOT_USERNAME=""

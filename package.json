@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "node ./bin/startMongoDB.js",
     "start": "node ./bin/startMongoDB.js",
+    "initiate-rs": "mongo --host $MONGO_HOSTS --eval \"rs.initiate()\"",
     "start-mongo": "mongo --host $MONGO_REPLICA_SET/$MONGO_HOSTS $MONGO_DATABASE",
     "start-mongo-remote": "mongo \"mongodb+srv://$ATLAS_CLUSTER-$ATLAS_HOSTS/$ATLAS_DATABASE\" --username $ATLAS_BOT_USERNAME --password $ATLAS_BOT_PASSWORD",
+    "start-mongo-remote-as-hub": "mongo \"mongodb+srv://$ATLAS_CLUSTER-$ATLAS_HOSTS/$ATLAS_DATABASE\" --username $ATLAS_HUB_USERNAME --password $ATLAS_HUB_PASSWORD",
     "start-mongo-remote-admin": "mongo \"mongodb+srv://$ATLAS_CLUSTER-$ATLAS_HOSTS/$ATLAS_DATABASE\" --username $ATLAS_ADMIN_USERNAME --password $ATLAS_ADMIN_PASSWORD",
     "create-bot-user": "mongo --host $MONGO_REPLICA_SET/$MONGO_HOSTS --eval \"const username = '$MONGO_BOT_USERNAME', password = '$MONGO_BOT_PASSWORD';\" $MONGO_DATABASE ./mongoScripts/createBot.js",
     "create-bot-user-remote": "echo 'Check the README'",
