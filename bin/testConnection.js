@@ -4,7 +4,7 @@ const [, , cluster, hosts, databaseName, replicaSet, username, password] = proce
 
 console.log('config', {
   username,
-  password,
+  // password,
   cluster,
   hosts,
   databaseName,
@@ -19,17 +19,16 @@ const data = new Data({
   replicaSet
 })
 
-data.use(({ db }) => {
-  return db.collection('events').insertOne({
-    name: 'test'
-  })
-    .then(() => {
-      return db.collection('events').find()
-    })
-    .then((cursor) => {
+;(async () => {
+  await data.use(async ({ db }) => {
+    try {
+      await db.collection('events').insertOne({ name: 'test' })
+      const cursor = db.collection('events').find().limit(2)
       cursor.forEach((event) => {
         console.log('event', event)
       })
-    })
-    .catch(console.error)
-})
+    } catch (ex) {
+      console.error(ex)
+    }
+  })
+})()

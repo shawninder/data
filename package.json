@@ -4,6 +4,7 @@
   "description": "The Database backing Crowdsplay",
   "main": "index.js",
   "scripts": {
+    "debug-mongo": "node ./bin/testConnection.js '' $MONGO_HOSTS $MONGO_DATABASE $MONGO_REPLICA_SET $MONGO_HUB_USERNAME $MONGO_HUB_PASSWORD",
     "debug-atlas": "node ./bin/testConnection.js $ATLAS_CLUSTER $ATLAS_HOSTS $ATLAS_DATABASE $ATLAS_REPLICA_SET $ATLAS_HUB_USERNAME $ATLAS_HUB_PASSWORD",
     "dev": "node ./bin/startMongoDB.js",
     "start": "node ./bin/startMongoDB.js",
