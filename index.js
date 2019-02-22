@@ -1,4 +1,5 @@
-const MongoClient = require('mongodb').MongoClient
+const Mongo = require('mongodb')
+const MongoClient = Mongo.MongoClient
 const qs = require('qs')
 
 // exit codes
@@ -87,5 +88,7 @@ class Data {
     })
   }
 }
+
+Data.ObjectId = Mongo.ObjectId
 
 module.exports = exports = Data
